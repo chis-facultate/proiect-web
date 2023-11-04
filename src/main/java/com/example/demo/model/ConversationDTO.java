@@ -3,8 +3,6 @@ package com.example.demo.model;
 public class ConversationDTO {
     private long id;
     private String conversationName;
-    public ConversationDTO() {
-    }
 
     public ConversationDTO(long id, String conversationName) {
         this.id = id;

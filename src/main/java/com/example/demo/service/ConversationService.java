@@ -1,27 +1,28 @@
 package com.example.demo.service;
 
+import com.example.demo.model.ConversationDTO;
 import com.example.demo.persistence.Conversation;
 import com.example.demo.repository.ConversationRepository;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class ConversationService {
 
-    ConversationRepository conversationRepository;
-
-    public ConversationService(ConversationRepository conversationRepository){
-        this.conversationRepository = conversationRepository;
+    @Autowired
+    private ConversationRepository conversationRepository;
+    public List<ConversationDTO> getAllConversations(){
+        return conversationRepository.findAll()
+                .stream()
+                .map(this::convertEntityToDto)
+                .collect(Collectors.toList());
     }
-
-
-
-    public List<Conversation> getAllConversations(){
-        return conversationRepository.findAll();
+    private ConversationDTO convertEntityToDto(Conversation conversation){
+        return new ConversationDTO(conversation.getId(), conversation.getConversationName());
     }
-
-
 }
