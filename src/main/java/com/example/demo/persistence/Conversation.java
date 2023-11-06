@@ -2,13 +2,24 @@ package com.example.demo.persistence;
 
 import javax.persistence.*;
 import java.util.Objects;
+import java.util.Set;
 
 @Entity
+
 public class Conversation {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Id
     @Column(name = "id")
     private long id;
+
+    @ManyToMany
+    @JoinTable(
+            name = "conversation_user",
+            joinColumns = @JoinColumn(name = "conversation_id"),
+            inverseJoinColumns = @JoinColumn(name = "user_id")
+    )
+    private Set<User> participants;
+
     @Basic
     @Column(name = "conversation_name")
     private String conversationName;

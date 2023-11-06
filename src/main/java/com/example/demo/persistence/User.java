@@ -2,6 +2,7 @@ package com.example.demo.persistence;
 
 import javax.persistence.*;
 import java.util.Objects;
+import java.util.Set;
 
 @Entity
 public class User {
@@ -9,15 +10,17 @@ public class User {
     @Id
     @Column(name = "id")
     private long id;
+    @ManyToMany(mappedBy = "participants")
+    private Set<Conversation> conversations;
     @Basic
     @Column(name = "nickname")
     private String nickname;
     @Basic
     @Column(name = "login_username")
     private String loginUsername;
-    @Basic
+    @Lob
     @Column(name = "password_hash")
-    private String passwordHash;
+    private byte[] passwordHash;
 
     public long getId() {
         return id;
@@ -43,11 +46,11 @@ public class User {
         this.loginUsername = loginUsername;
     }
 
-    public String getPasswordHash() {
+    public byte[] getPasswordHash() {
         return passwordHash;
     }
 
-    public void setPasswordHash(String passwordHash) {
+    public void setPasswordHash(byte[] passwordHash) {
         this.passwordHash = passwordHash;
     }
 
