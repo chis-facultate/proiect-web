@@ -1,37 +1,20 @@
-package com.example.demo.persistence;
+package com.example.demo.model;
 
-import javax.persistence.*;
 import java.sql.Timestamp;
-import java.util.Objects;
 
-@Entity
-public class Message {
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Id
-    @Column(name = "id")
+public class MessageDTO {
     private long id;
-    @Basic
-    @Column(name = "conversation_id")
     private long conversationId;
-    @Basic
-    @Column(name = "user_id")
     private long userId;
-    @Basic
-    @Column(name = "message_text")
     private String messageText;
-    @Basic
-    @Column(name = "sent_datetime", columnDefinition = "TIMESTAMP DEFAULT CURRENT_TIMESTAMP")
     private Timestamp sentDatetime;
 
-    public Message(long id, long conversationId, long userId, String messageText) {
+    public MessageDTO(long id, long conversationId, long userId, String messageText, Timestamp sentDatetime) {
         this.id = id;
         this.conversationId = conversationId;
         this.userId = userId;
         this.messageText = messageText;
-    }
-
-    public Message() {
-
+        this.sentDatetime = sentDatetime;
     }
 
     public long getId() {
@@ -72,18 +55,5 @@ public class Message {
 
     public void setSentDatetime(Timestamp sentDatetime) {
         this.sentDatetime = sentDatetime;
-    }
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        Message message = (Message) o;
-        return id == message.id && conversationId == message.conversationId && userId == message.userId && Objects.equals(messageText, message.messageText) && Objects.equals(sentDatetime, message.sentDatetime);
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(id, conversationId, userId, messageText, sentDatetime);
     }
 }

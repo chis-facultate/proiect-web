@@ -12,13 +12,7 @@ public class ConversationController {
 
     @Autowired
     private ConversationService conversationService;
-/*
-    @GetMapping(value="/conversations")
-    public ResponseEntity<Object> getAllConversations(){
-        return new ResponseEntity<>(conversationService.getAllConversations(),
-                HttpStatus.OK);
-    }
-*/
+
     @GetMapping(value="/get/{userId}")
     public ResponseEntity<Object> getConversationsOfUser(@PathVariable Long userId){
         return new ResponseEntity<>(conversationService.getConversationsOfUser(userId),
@@ -28,6 +22,6 @@ public class ConversationController {
     @DeleteMapping(value="/delete/{id}")
     public ResponseEntity<Object> deleteConversation(@PathVariable Long id){
         conversationService.deleteById(id);
-        return new ResponseEntity<>(HttpStatus.OK);
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 }
