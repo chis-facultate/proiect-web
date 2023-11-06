@@ -10,4 +10,14 @@ public class WebController {
     public String index(){
         return "index";
     }
+
+    @GetMapping("/account")
+    public String account(){
+        return "account_details";
+    }
+
+    @GetMapping("/home")
+    public String home(){
+        return "home";
+    }
 }

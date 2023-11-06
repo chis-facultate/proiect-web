@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Account Details</title>
+    <!-- Include Bootstrap CSS -->
+    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body>
+<div class="container mt-5">
+    <h2>Account Details</h2>
+    <form>
+        <div class="form-group">
+            <label for="username">Login Username:</label>
+            <input type="text" class="form-control" id="username" value="exampleuser" readonly>
+        </div>
+        <div class="form-group">
+            <label for="nickname">Nickname:</label>
+            <input type="text" class="form-control" id="nickname" placeholder="Enter your nickname">
+        </div>
+        <button type="button" class="btn btn-primary" id="saveChanges">Save Changes</button>
+    </form>
+</div>
+
+<!-- Include Bootstrap JS and jQuery (required for Bootstrap) -->
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
+<script>
+    // JavaScript code for handling the "Save Changes" button click
+    document.getElementById('saveChanges').addEventListener('click', function() {
+        // Get the value from the nickname field
+        var newNickname = document.getElementById('nickname').value;
+
+        // You can perform further actions here, like sending the updated data to the server.
+        // For this example, we'll just display an alert with the new nickname.
+        alert('Nickname saved: ' + newNickname);
+    });
+</script>
+</body>
+</html>
