@@ -31,8 +31,18 @@ public class MessageService {
                 message.getSentDatetime());
     }
 
+    /**
+     * Converteste un obiect MessageDTO in obiect de tip Message.
+     * In momentul conversiei nu se seteaza id-ul, nici campul date_time deoarece e responsabilitatea
+     * Serverului de baze de date sa initializeze acele campuri.
+     * @param messageDTO obiectul de transfer care urmeaza a fi convertit
+     * @return obiect de tip Message
+     */
     private Message convertDtoToEntity(MessageDTO messageDTO){
-        return new Message(messageDTO.getId(), messageDTO.getConversationId(), messageDTO.getUserId(),
-                messageDTO.getMessageText());
+        Message message = new Message();
+        message.setConversationId(messageDTO.getConversationId());
+        message.setUserId(messageDTO.getUserId());
+        message.setMessageText(messageDTO.getMessageText());
+        return message;
     }
 }

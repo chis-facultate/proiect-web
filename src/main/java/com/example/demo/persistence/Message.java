@@ -23,13 +23,6 @@ public class Message {
     @Column(name = "sent_datetime", columnDefinition = "TIMESTAMP DEFAULT CURRENT_TIMESTAMP")
     private Timestamp sentDatetime;
 
-    public Message(long id, long conversationId, long userId, String messageText) {
-        this.id = id;
-        this.conversationId = conversationId;
-        this.userId = userId;
-        this.messageText = messageText;
-    }
-
     public Message() {
 
     }

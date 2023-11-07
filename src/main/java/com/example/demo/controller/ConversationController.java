@@ -1,5 +1,6 @@
 package com.example.demo.controller;
 
+import com.example.demo.model.ConversationDTO;
 import com.example.demo.service.ConversationService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -17,6 +18,11 @@ public class ConversationController {
     public ResponseEntity<Object> getConversationsOfUser(@PathVariable Long userId){
         return new ResponseEntity<>(conversationService.getConversationsOfUser(userId),
                 HttpStatus.OK);
+    }
+
+    @PostMapping(value = "/create")
+    public ResponseEntity<Object> createConversation(@RequestBody ConversationDTO conversationDTO){
+        return new ResponseEntity<>(conversationService.createConversation(conversationDTO), HttpStatus.CREATED);
     }
 
     @DeleteMapping(value="/delete/{id}")

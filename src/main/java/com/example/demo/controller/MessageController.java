@@ -15,12 +15,12 @@ public class MessageController {
     private MessageService messageService;
 
     @GetMapping(value = "/get/{conversationId}")
-    public ResponseEntity<Object> findByConversationId(@PathVariable Long conversationId){
+    public ResponseEntity<Object> findByConversationId(@PathVariable Long conversationId) {
         return new ResponseEntity<>(messageService.findByConversationId(conversationId), HttpStatus.OK);
     }
 
     @PostMapping(value = "/save")
-    public ResponseEntity<Object> saveMessage(@RequestBody MessageDTO messageDTO){
+    public ResponseEntity<Object> saveMessage(@RequestBody MessageDTO messageDTO) {
         return new ResponseEntity<>(messageService.saveMessage(messageDTO), HttpStatus.CREATED);
     }
 }

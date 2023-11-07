@@ -12,4 +12,5 @@ public interface ConversationRepository extends CrudRepository<Conversation, Lon
 
     @Query("SELECT conversation FROM Conversation conversation JOIN conversation.participants user WHERE user.id = :userId")
     List<Conversation> findByUserId(@Param("userId") Long userId);
+
 }
