@@ -20,6 +20,19 @@ public class AuthController {
         this.authenticationManager = authenticationManager;
     }
 
+    /**
+     * Authentication authenticate = authenticationManager.authenticate(...)
+     * It attempts to authenticate the user by using the authenticationManager.
+     * It creates an Authentication object with the provided UsernamePasswordAuthenticationToken,
+     * which contains the user's login credentials.
+     *
+     * SecurityContextHolder.getContext().setAuthentication(authenticate)
+     * After successful authentication, the authenticated Authentication object is set in the security context.
+     * This step effectively logs the user in.
+     *
+     * @param userCredentialsDTO obiect de transfer continand credentialele care trebuie verificate
+     * @return HTTP STATUS OK
+     */
     @PostMapping("/login")
     public ResponseEntity<String> login(@RequestBody UserCredentialsDTO userCredentialsDTO) {
         Authentication authenticate = authenticationManager
@@ -28,15 +41,4 @@ public class AuthController {
         SecurityContextHolder.getContext().setAuthentication(authenticate);
         return new ResponseEntity<>("Login successfully!", HttpStatus.OK);
     }
-
-    /*
-@PostMapping("/login")
-public ResponseEntity<String> login(@RequestBody User userCredentialsDTO) {
-    Authentication authenticate = authenticationManager
-            .authenticate(new UsernamePasswordAuthenticationToken(userCredentialsDTO.getLoginUsername(),
-                    userCredentialsDTO.getPasswordHash()));
-    SecurityContextHolder.getContext().setAuthentication(authenticate);
-    return new ResponseEntity<>("Login successfully!", HttpStatus.OK);
-}
-     */
 }
