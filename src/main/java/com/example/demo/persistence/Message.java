@@ -1,5 +1,7 @@
 package com.example.demo.persistence;
 
+import org.hibernate.annotations.CreationTimestamp;
+
 import javax.persistence.*;
 import java.sql.Timestamp;
 import java.util.Objects;
@@ -19,8 +21,8 @@ public class Message {
     @Basic
     @Column(name = "message_text")
     private String messageText;
-    @Basic
-    @Column(name = "sent_datetime", columnDefinition = "TIMESTAMP DEFAULT CURRENT_TIMESTAMP")
+    @CreationTimestamp
+    @Column(name = "sent_datetime")
     private Timestamp sentDatetime;
 
     public Message() {

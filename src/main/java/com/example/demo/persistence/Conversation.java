@@ -20,6 +20,14 @@ public class Conversation {
     )
     private Set<User> participants;
 
+    @ManyToMany
+    @JoinTable(
+            name = "message",
+            joinColumns = @JoinColumn(name = "conversation_id"),
+            inverseJoinColumns = @JoinColumn(name = "user_id")
+    )
+    private Set<User> participants2;
+
     @Basic
     @Column(name = "conversation_name")
     private String conversationName;

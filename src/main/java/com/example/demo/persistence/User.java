@@ -12,6 +12,8 @@ public class User {
     private long id;
     @ManyToMany(mappedBy = "participants")
     private Set<Conversation> conversations;
+    @ManyToMany(mappedBy = "participants2")
+    private Set<Conversation> conversations2;
     @Basic
     @Column(name = "nickname")
     private String nickname;
@@ -20,7 +22,7 @@ public class User {
     private String loginUsername;
     @Lob
     @Column(name = "password_hash")
-    private byte[] passwordHash;
+    private String passwordHash;
 
     public long getId() {
         return id;
@@ -46,11 +48,11 @@ public class User {
         this.loginUsername = loginUsername;
     }
 
-    public byte[] getPasswordHash() {
+    public String getPasswordHash() {
         return passwordHash;
     }
 
-    public void setPasswordHash(byte[] passwordHash) {
+    public void setPasswordHash(String passwordHash) {
         this.passwordHash = passwordHash;
     }
 

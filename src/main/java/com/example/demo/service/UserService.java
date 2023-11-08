@@ -1,6 +1,6 @@
 package com.example.demo.service;
 
-import com.example.demo.model.UserDTO;
+import com.example.demo.model.UserDataDTO;
 import com.example.demo.persistence.User;
 import com.example.demo.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,7 +19,7 @@ public class UserService {
      * @param id id-ul user-ului cautat
      * @return o instanta UserDTO daca a fost gasit user-ul, altfel returneaza null
      */
-    public UserDTO findById(Long id){
+    public UserDataDTO findById(Long id){
         Optional<User> optionalUser = userRepository.findById(id);
         if(optionalUser.isPresent()){
             User user = optionalUser.get();
@@ -34,7 +34,7 @@ public class UserService {
      * @param newNickname nickname-ul nou
      * @return o instanta UserDTO daca a fost gasit user-ul, altfel returneaza null
      */
-    public UserDTO patchNickname(Long id, String newNickname){
+    public UserDataDTO patchNickname(Long id, String newNickname){
         Optional<User> optionalUser = userRepository.findById(id);
         if(optionalUser.isPresent()){
             User user = optionalUser.get();
@@ -45,7 +45,7 @@ public class UserService {
         return null;
     }
 
-    private UserDTO convertEntityToDto(User user){
-        return new UserDTO(user.getId(), user.getNickname(), user.getLoginUsername());
+    private UserDataDTO convertEntityToDto(User user){
+        return new UserDataDTO(user.getId(), user.getNickname(), user.getLoginUsername());
     }
 }

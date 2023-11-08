@@ -1,11 +1,11 @@
 package com.example.demo.model;
 
-public class UserDTO {
+public class UserDataDTO {
     private long id;
     private String nickname;
     private String loginUsername;
 
-    public UserDTO(long id, String nickname, String loginUsername) {
+    public UserDataDTO(long id, String nickname, String loginUsername) {
         this.id = id;
         this.nickname = nickname;
         this.loginUsername = loginUsername;
