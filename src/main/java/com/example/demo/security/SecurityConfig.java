@@ -12,9 +12,11 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.NoOpPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
 import org.springframework.security.web.authentication.HttpStatusEntryPoint;
+import org.springframework.security.web.authentication.SavedRequestAwareAuthenticationSuccessHandler;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 
 @Configuration
@@ -30,43 +32,35 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         this.customUserDetailsService = customUserDetailsService;
     }
 
+    /*
     @Bean
     public static PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
     }
+     */
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http.csrf().disable()// This line disables Cross-Site Request Forgery protection. it is often disabled for stateless authentication mechanisms like token-based authentication. It allows HTTP requests without the need for CSRF tokens
                 .authorizeRequests() //This method indicates that you're about to configure authorization rules for different URL patterns
                 .antMatchers("/login").permitAll() // no need to auth to access the endpoint
-                .anyRequest().authenticated()// for any other request (anyRequest), the user must be authenticated to access it. In other words, to access any URL not explicitly configured with "permitAll," users must be logged in.
-                .and()
-                .formLogin(
-                        form -> form
-                                .loginPage("/")
-                                .loginProcessingUrl("/login")
-                                .defaultSuccessUrl("/home")
-                ).logout(
-                        logout -> logout
-                                //.logoutRequestMatcher(new AntPathRequestMatcher("/logout"))
-                                .invalidateHttpSession(true)
-                                .deleteCookies("JSESSIONID")
-                )
-                .sessionManagement(session -> session
-                                .sessionCreationPolicy(SessionCreationPolicy.ALWAYS)
-                        //.sessionCreationPolicy(SessionCreationPolicy.STATELESS)
-                        .invalidSessionUrl("/")
-                        //.maximumSessions(1)
-                        //.maxSessionsPreventsLogin(false)
-                )
-                .exceptionHandling().authenticationEntryPoint(new HttpStatusEntryPoint(HttpStatus.UNAUTHORIZED)); // returns 401 if trying to access protected resource
+                .antMatchers("/").permitAll()
+                .anyRequest().authenticated();// for any other request (anyRequest), the user must be authenticated to access it. In other words, to access any URL not explicitly configured with "permitAll," users must be logged in.
+    }
+
+    @Bean
+    public AuthenticationSuccessHandler authenticationSuccessHandler() {
+        SavedRequestAwareAuthenticationSuccessHandler successHandler = new SavedRequestAwareAuthenticationSuccessHandler();
+        successHandler.setTargetUrlParameter("redirectTo"); // Redirect to the "redirectTo" parameter if available
+        successHandler.setDefaultTargetUrl("/home"); // Default redirect URL to "/home"
+        return successHandler;
     }
 
     @Override
     protected void configure(AuthenticationManagerBuilder auth) throws Exception {
-        auth.userDetailsService(customUserDetailsService);
+        auth.userDetailsService(customUserDetailsService)
                 //.passwordEncoder(passwordEncoder());
+                .passwordEncoder(NoOpPasswordEncoder.getInstance());
     }
 
     @Override
@@ -74,42 +68,4 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     public AuthenticationManager authenticationManagerBean() throws Exception {
         return super.authenticationManagerBean();
     }
-
-
-/*
-    @Bean
-    public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
-        http.csrf().disable()
-                .authorizeRequests()
-                .antMatchers("/index").permitAll()
-                .anyRequest().authenticated()
-                .and()
-                .formLogin(
-                        form -> form
-                                .loginPage("/login")
-                                .loginProcessingUrl("/login")
-                                .defaultSuccessUrl("/home")
-                                .permitAll()
-                ).logout(
-                        logout -> logout
-                                .logoutRequestMatcher(new AntPathRequestMatcher("/logout"))
-                                .permitAll()
-                                .invalidateHttpSession(true)
-                                .deleteCookies("JSESSIONID")
-
-                );
-
-        http.csrf().disable()
-                .authorizeRequests()
-                .antMatchers(HttpMethod.POST, "/login").permitAll()
-                .antMatchers(HttpMethod.GET, "/index").permitAll()
-                .anyRequest().authenticated()
-                .and()
-                .httpBasic();
-                .exceptionHandling().authenticationEntryPoint(new HttpStatusEntryPoint(HttpStatus.UNAUTHORIZED))
-                .and()
-                .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
-        return http.build();
-    }
- */
 }

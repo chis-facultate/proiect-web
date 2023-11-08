@@ -1,7 +1,6 @@
 package com.example.demo.controller;
 
 import com.example.demo.model.UserCredentialsDTO;
-import com.example.demo.persistence.User;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -31,7 +30,7 @@ public class AuthController {
      * This step effectively logs the user in.
      *
      * @param userCredentialsDTO obiect de transfer continand credentialele care trebuie verificate
-     * @return HTTP STATUS OK
+     * @return HTTP STATUS CREATED
      */
     @PostMapping("/login")
     public ResponseEntity<String> login(@RequestBody UserCredentialsDTO userCredentialsDTO) {
@@ -39,6 +38,6 @@ public class AuthController {
                 .authenticate(new UsernamePasswordAuthenticationToken(userCredentialsDTO.getLoginUsername(),
                         userCredentialsDTO.getPassword()));
         SecurityContextHolder.getContext().setAuthentication(authenticate);
-        return new ResponseEntity<>("Login successfully!", HttpStatus.OK);
+        return new ResponseEntity<>("Login successfully!", HttpStatus.CREATED);
     }
 }
