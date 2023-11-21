@@ -35,7 +35,6 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         http.csrf().disable()// disables Cross-Site Request Forgery protection.
                 // It is often disabled for stateless authentication mechanisms like token-based authentication.
                 // It allows HTTP requests without the need for CSRF tokens.
-                // *** desi autentificarea e cu session trebuie dezactivat oricum.
                 .authorizeRequests() //This method indicates that you're about to configure authorization rules for different URL patterns
                 .antMatchers("/login").permitAll() // no need to auth to access the endpoint
                 .antMatchers("/").permitAll()

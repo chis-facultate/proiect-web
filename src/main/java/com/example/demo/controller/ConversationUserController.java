@@ -7,6 +7,9 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.Cookie;
+import javax.servlet.http.HttpServletRequest;
+
 @RestController
 @RequestMapping("/conversation_user")
 public class ConversationUserController {
@@ -16,12 +19,13 @@ public class ConversationUserController {
 
     @PostMapping(value = "/invite")
     public ResponseEntity<Object> invite(@RequestBody ConversationUserDTO conversationUserDTO) {
-        return new ResponseEntity<>(conversationUserService.inviteToConversation(conversationUserDTO),
-                HttpStatus.CREATED);
+        return new ResponseEntity<>(conversationUserService.inviteToConversation(conversationUserDTO), HttpStatus.CREATED);
     }
 
-    @DeleteMapping(value = "/leave/{conversationId}/{userId}")
-    public ResponseEntity<Object> leave(@PathVariable Long conversationId, @PathVariable Long userId){
+    @DeleteMapping(value = "/leave/{conversationId}")
+    public ResponseEntity<Object> leave(@PathVariable Long conversationId, HttpServletRequest request){
+        Cookie[] cookies = request.getCookies();
+        Long userId = Long.valueOf(cookies[1].getValue());
         conversationUserService.deleteByConversationIdAndUserId(conversationId, userId);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }

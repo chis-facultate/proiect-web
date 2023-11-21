@@ -7,6 +7,9 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.Cookie;
+import javax.servlet.http.HttpServletRequest;
+
 @RestController
 @RequestMapping("/conversations")
 public class ConversationController {
@@ -14,10 +17,11 @@ public class ConversationController {
     @Autowired
     private ConversationService conversationService;
 
-    @GetMapping(value="/get/{userId}")
-    public ResponseEntity<Object> getConversationsOfUser(@PathVariable Long userId){
-        return new ResponseEntity<>(conversationService.getConversationsOfUser(userId),
-                HttpStatus.OK);
+    @GetMapping(value="/get")
+    public ResponseEntity<Object> getConversationsOfUser(HttpServletRequest request){
+        Cookie[] cookies = request.getCookies();
+        Long userId = Long.valueOf(cookies[1].getValue());
+        return new ResponseEntity<>(conversationService.getConversationsOfUser(userId), HttpStatus.OK);
     }
 
     @PostMapping(value = "/create")

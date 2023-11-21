@@ -6,6 +6,9 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.Cookie;
+import javax.servlet.http.HttpServletRequest;
+
 @RestController
 @RequestMapping("/user")
 public class UserController {
@@ -13,15 +16,17 @@ public class UserController {
     @Autowired
     private UserService userService;
 
-    @GetMapping(value = "/get/{id}")
-    public ResponseEntity<Object> getUserData(@PathVariable Long id){
-        return new ResponseEntity<>(userService.findById(id),
-                HttpStatus.OK);
+    @GetMapping(value = "/get")
+    public ResponseEntity<Object> getUserData(HttpServletRequest request){
+        Cookie[] cookies = request.getCookies();
+        Long userId = Long.valueOf(cookies[1].getValue());
+        return new ResponseEntity<>(userService.findById(userId), HttpStatus.OK);
     }
 
-    @PatchMapping(value = "/patch_nickname/{id}/{newNickname}")
-    public ResponseEntity<Object> patchNickname(@PathVariable Long id, @PathVariable String newNickname){
-        return new ResponseEntity<>(userService.patchNickname(id, newNickname),
-                HttpStatus.OK);
+    @PatchMapping(value = "/patch_nickname/{newNickname}")
+    public ResponseEntity<Object> patchNickname(@PathVariable String newNickname, HttpServletRequest request){
+        Cookie[] cookies = request.getCookies();
+        Long userId = Long.valueOf(cookies[1].getValue());
+        return new ResponseEntity<>(userService.patchNickname(userId, newNickname), HttpStatus.OK);
     }
 }

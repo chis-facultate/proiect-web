@@ -45,6 +45,15 @@ public class UserService {
         return null;
     }
 
+    public UserDataDTO findByLoginUsername(String loginUsername){
+        Optional<User> optionalUser = userRepository.findByLoginUsername(loginUsername);
+        if(optionalUser.isPresent()){
+            User user = optionalUser.get();
+            return convertEntityToDto(user);
+        }
+         return null;
+    }
+
     private UserDataDTO convertEntityToDto(User user){
         return new UserDataDTO(user.getId(), user.getNickname(), user.getLoginUsername());
     }

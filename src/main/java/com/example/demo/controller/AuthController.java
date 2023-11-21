@@ -1,6 +1,8 @@
 package com.example.demo.controller;
 
 import com.example.demo.model.UserCredentialsDTO;
+import com.example.demo.model.UserDataDTO;
+import com.example.demo.service.UserService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -11,12 +13,18 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 
+import javax.servlet.http.Cookie;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
 @Controller
 public class AuthController {
     private AuthenticationManager authenticationManager;
+    private UserService userService;
 
-    public AuthController(AuthenticationManager authenticationManager) {
+    public AuthController(AuthenticationManager authenticationManager, UserService userService) {
         this.authenticationManager = authenticationManager;
+        this.userService = userService;
     }
 
     /**
@@ -33,11 +41,22 @@ public class AuthController {
      * @return HTTP STATUS CREATED
      */
     @PostMapping("/login")
-    public ResponseEntity<String> login(@RequestBody UserCredentialsDTO userCredentialsDTO) {
+    public ResponseEntity<String> login(@RequestBody UserCredentialsDTO userCredentialsDTO,
+                                        HttpServletRequest request,
+    HttpServletResponse response) {
         Authentication authenticate = authenticationManager
                 .authenticate(new UsernamePasswordAuthenticationToken(userCredentialsDTO.getLoginUsername(),
                         userCredentialsDTO.getPassword()));
         SecurityContextHolder.getContext().setAuthentication(authenticate);
+
+        //
+        UserDataDTO userDataDTO = userService.findByLoginUsername(userCredentialsDTO.getLoginUsername());
+        Cookie userCookie = new Cookie("userId", String.valueOf(userDataDTO.getId()));
+        userCookie.setMaxAge(-1); // cookie valabil pe durata sesiunii
+        userCookie.setPath("/");
+        response.addCookie(userCookie);
+//
+
         return new ResponseEntity<>("Login successfully!", HttpStatus.CREATED);
     }
 }
