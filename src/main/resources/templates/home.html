@@ -86,7 +86,7 @@
                     // Dynamically add conversation items
                     conversations.forEach(conversation => {
                         const listItem = $(
-                            "<a href='#' class='list-group-item list-group-item-action'></a>"
+                            "<p class='list-group-item list-group-item-action'></p>"
                         ).text(conversation.conversationName);
                         listItem.attr('id', conversation.id);
                         conversationList.append(listItem);
@@ -173,15 +173,25 @@
         const leaveConversationButton = document.querySelector(".leave-conversation");
         leaveConversationButton.addEventListener("click", () => {
             // Implement the logic to leave the conversation
+            $.ajax({
+                type: "DELETE",
+                url: `/conversation_user/leave/${selectedConversationId}`,
+                contentType: "application/json",
+                success: () => {
+                    document.getElementById(selectedConversationId).remove();
+                    $(".messages").empty();
+                    console.log("conversation left");
+                },
+                error: () => {
+                    console.error("error leaving conversation");
+                }
+            });
         });
 
         // Add event listener for the "Account Details" button
         const accountDetailsButton = document.querySelector(".account-details");
         accountDetailsButton.addEventListener("click", () => {
-            // Implement the logic to navigate to the page with account details.
-            // You can use window.location.href or any other method to redirect to the account details page.
-            window.location.href =
-                "account-details.html"; // Replace with the actual URL of your account details page.
+            window.location.href = "/account";
         });
 
         const inviteToConversationButton = document.querySelector(".invite-to-conversation");
@@ -190,8 +200,21 @@
         });
 
         const deleteConversationButton = document.querySelector(".delete-conversation");
-        deleteConversationButton.addEventListener("click", () => {
+        deleteConversationButton.addEventListener("click", event => {
             // Implement the logic to delete the conversation
+            $.ajax({
+                type: "DELETE",
+                url: `/conversations/delete/${selectedConversationId}`,
+                contentType: "application/json",
+                success: () => {
+                    document.getElementById(selectedConversationId).remove();
+                    $(".messages").empty();
+                    console.log("conversation deleted");
+                },
+                error: () => {
+                    console.error("error deleting conversation");
+                }
+            });
         });
     </script>
 </body>

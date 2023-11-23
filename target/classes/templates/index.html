@@ -43,7 +43,7 @@
         });
 
         function submitLoginForm() {
-            const formData = {
+            const userCredentialsDTO = {
                 loginUsername: $("#username").val(),
                 password: $("#password").val()
             };
@@ -52,7 +52,7 @@
                 type: "POST",
                 url: "/login",
                 contentType: "application/json",
-                data: JSON.stringify(formData),
+                data: JSON.stringify(userCredentialsDTO),
                 success: () => {
                     console.log("Login successful");
                     // Redirect to /home

@@ -4,7 +4,6 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Account Details</title>
-    <!-- Include Bootstrap CSS -->
     <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
 </head>
 <body>
@@ -23,20 +22,41 @@
     </form>
 </div>
 
-<!-- Include Bootstrap JS and jQuery (required for Bootstrap) -->
-<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 
 <script>
-    // JavaScript code for handling the "Save Changes" button click
-    document.getElementById('saveChanges').addEventListener('click', function() {
-        // Get the value from the nickname field
-        var newNickname = document.getElementById('nickname').value;
+    $(document).ready(() => {
+        $.ajax({
+                type: "GET",
+                url: "/user/get",
+                contentType: "application/json",
+                success: userDataDTO => {
+                    document.getElementById('username').value = userDataDTO.loginUsername;
+                    document.getElementById('nickname').value = userDataDTO.nickname;
+                    console.log("data fetched");
+                },
+                error: () => {
+                    console.error("data not fetched");
+                }
+            });
+    });
 
-        // You can perform further actions here, like sending the updated data to the server.
-        // For this example, we'll just display an alert with the new nickname.
-        alert('Nickname saved: ' + newNickname);
+    // JavaScript code for handling the "Save Changes" button click
+    document.getElementById('saveChanges').addEventListener('click', () => {
+        const newNickname = document.getElementById('nickname').value;
+        $.ajax({
+                type: "PATCH",
+                url: `/user/patch_nickname/${newNickname}`,
+                contentType: "application/json",
+                success: () => {
+                    console.log("data saved");
+                },
+                error: () => {
+                    console.error("data not saved");
+                }
+            });
     });
 </script>
 </body>
