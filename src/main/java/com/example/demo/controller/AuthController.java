@@ -10,6 +10,7 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 
@@ -58,5 +59,10 @@ public class AuthController {
 //
 
         return new ResponseEntity<>("Login successfully!", HttpStatus.CREATED);
+    }
+
+    @GetMapping("/logout")
+    public ResponseEntity<String> logout() {
+        return new ResponseEntity<>("Logout successfully!", HttpStatus.OK);
     }
 }

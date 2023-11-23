@@ -38,7 +38,13 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .authorizeRequests() //This method indicates that you're about to configure authorization rules for different URL patterns
                 .antMatchers("/login").permitAll() // no need to auth to access the endpoint
                 .antMatchers("/").permitAll()
-                .anyRequest().authenticated();// for any other request (anyRequest), the user must be authenticated to access it. In other words, to access any URL not explicitly configured with "permitAll," users must be logged in.
+                .anyRequest().authenticated()// for any other request (anyRequest), the user must be authenticated to access it. In other words, to access any URL not explicitly configured with "permitAll," users must be logged in.
+            .and()
+                .logout()
+                .logoutUrl("/logout") // Specify the URL for the logout endpoint
+                .logoutSuccessUrl("/") // Redirect to the login page
+                .invalidateHttpSession(true)
+                .deleteCookies("*"); // Delete cookies
     }
 
     @Override

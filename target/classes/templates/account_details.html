@@ -45,14 +45,12 @@
 
     // JavaScript code for handling the "Save Changes" button click
     document.getElementById('saveChanges').addEventListener('click', () => {
-        const element = document.getElementById('nickname');
-        const newNickname = element.value;
+        const newNickname = document.getElementById('nickname').value;
         $.ajax({
                 type: "PATCH",
                 url: `/user/patch_nickname/${newNickname}`,
                 contentType: "application/json",
                 success: () => {
-                    element.value = newNickname;
                     console.log("data saved");
                 },
                 error: () => {

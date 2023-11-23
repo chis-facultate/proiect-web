@@ -40,6 +40,7 @@
                 <div class="text-center mb-3">
                     <button class="btn btn-primary account-details">Account Details</button>
                     <button class="btn btn-primary" id="newConversationButton">New Conversation</button>
+                    <button class="btn btn-danger" id="logout-btn">Logout</button>
                 </div>
                 <div class="list-group conversation-list" id="conversationList">
                     <!-- Conversation items will be dynamically added here -->
@@ -163,13 +164,6 @@
             });
         })
 
-        // Add functionality for creating new conversations (not implemented in this example)
-        const newConversationButton = document.getElementById("newConversationButton");
-        newConversationButton.addEventListener("click", () => {
-            // Implement the logic to create a new conversation
-        });
-
-        // Add functionality for action buttons (leave, invite, delete) based on the selected conversation
         const leaveConversationButton = document.querySelector(".leave-conversation");
         leaveConversationButton.addEventListener("click", () => {
             // Implement the logic to leave the conversation
@@ -194,11 +188,6 @@
             window.location.href = "/account";
         });
 
-        const inviteToConversationButton = document.querySelector(".invite-to-conversation");
-        inviteToConversationButton.addEventListener("click", () => {
-            // Implement the logic to invite someone to the conversation
-        });
-
         const deleteConversationButton = document.querySelector(".delete-conversation");
         deleteConversationButton.addEventListener("click", event => {
             // Implement the logic to delete the conversation
@@ -213,6 +202,23 @@
                 },
                 error: () => {
                     console.error("error deleting conversation");
+                }
+            });
+        });
+
+        const logoutButton = document.getElementById("logout-btn");
+        logoutButton.addEventListener("click", () => {
+            $.ajax({
+                type: "GET",
+                url: "/logout",
+                contentType: "application/json",
+                success: response => {
+                    window.location.href = "/";
+                    console.log(response);
+                    console.log("logout successfully");
+                },
+                error: () => {
+                    console.error("error logout");
                 }
             });
         });
