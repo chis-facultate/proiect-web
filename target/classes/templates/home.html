@@ -1,138 +1,202 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Conversations and Messages</title>
     <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
     <style>
-        body{
+        body {
             height: 100vh;
             margin: 0;
             overflow-y: hidden;
         }
-        .conversation-list{
+
+        .conversation-list {
             width: 100%;
             height: 90vh;
             overflow-y: scroll;
         }
+
         .messages {
             width: 100%;
             height: 85%;
             overflow-y: scroll;
         }
+
         .fixed-size-textarea {
-            height: 100%; 
+            height: 100%;
             resize: none;
         }
     </style>
 </head>
+
 <body>
-<div class="container-fluid">
-    <div class="row">
-        <!-- Left Side: Conversations -->
-        <div class="col-3 border-right">
-            <div class="text-center mb-3">
-                <button class="btn btn-primary account-details">Account Details</button>
-                <button class="btn btn-primary" id="newConversationButton">New Conversation</button>
+    <div class="container-fluid">
+        <div class="row">
+            <!-- Left Side: Conversations -->
+            <div class="col-3 border-right">
+                <div class="text-center mb-3">
+                    <button class="btn btn-primary account-details">Account Details</button>
+                    <button class="btn btn-primary" id="newConversationButton">New Conversation</button>
+                </div>
+                <div class="list-group conversation-list" id="conversationList">
+                    <!-- Conversation items will be dynamically added here -->
+                </div>
             </div>
-            <div class="list-group conversation-list">
-                <!-- Conversation items will be dynamically added here -->
-                <a href="#" class="list-group-item list-group-item-action">Conversation 1</a>
-                <a href="#" class="list-group-item list-group-item-action">Conversation 2</a>
-                <a href="#" class="list-group-item list-group-item-action">Conversation 3</a>
-                <a href="#" class="list-group-item list-group-item-action">Conversation 1</a>
-                <a href="#" class="list-group-item list-group-item-action">Conversation 2</a>
-                <a href="#" class="list-group-item list-group-item-action">Conversation 3</a>
-                <a href="#" class="list-group-item list-group-item-action">Conversation 1</a>
-                <a href="#" class="list-group-item list-group-item-action">Conversation 2</a>
-                <a href="#" class="list-group-item list-group-item-action">Conversation 3</a>
-                <a href="#" class="list-group-item list-group-item-action">Conversation 1</a>
-                <a href="#" class="list-group-item list-group-item-action">Conversation 2</a>
-                <a href="#" class="list-group-item list-group-item-action">Conversation 3</a>
-                <a href="#" class="list-group-item list-group-item-action">Conversation 1</a>
-                <a href="#" class="list-group-item list-group-item-action">Conversation 2</a>
-                <a href="#" class="list-group-item list-group-item-action">Conversation 3</a>
-                <a href="#" class="list-group-item list-group-item-action">Conversation 1</a>
-                <a href="#" class="list-group-item list-group-item-action">Conversation 2</a>
-                <a href="#" class="list-group-item list-group-item-action">Conversation 3</a>
-            </div>
-        </div>
-        <!-- Right Side: container for Messages and Action Buttons -->
-        <div class="col-9" style="height: 100vh;">
-            <!-- Container for Action Buttons -->
-            <div class="action-buttons">
-                <button class="btn btn-primary invite-to-conversation">Invite to Conversation</button>
-                <button class="btn btn-warning leave-conversation">Leave Conversation</button>
-                <button class="btn btn-danger delete-conversation">Delete Conversation</button>
-            </div>
-            <!-- Scrollable container for Messages -->
-            <div class="messages">
-                <!-- Messages for the selected conversation will be displayed here -->
-            </div>
-            <!-- Container for Text Area and Send Button -->
-            <div class="message-input" style="display: flex; flex-direction: row;">
-                <textarea class="form-control fixed-size-textarea" placeholder="Type your message"></textarea>
-                <button class="btn btn-success send-message">Send</button>
+            <!-- Right Side: container for Messages and Action Buttons -->
+            <div class="col-9" style="height: 100vh;">
+                <!-- Container for Action Buttons -->
+                <div class="action-buttons">
+                    <button class="btn btn-primary invite-to-conversation">Invite to Conversation</button>
+                    <button class="btn btn-warning leave-conversation">Leave Conversation</button>
+                    <button class="btn btn-danger delete-conversation">Delete Conversation</button>
+                </div>
+                <!-- Scrollable container for Messages -->
+                <div class="messages">
+                    <!-- Messages for the selected conversation will be displayed here -->
+                </div>
+                <!-- Container for Text Area and Send Button -->
+                <div class="message-input" style="display: flex; flex-direction: row;">
+                    <textarea class="form-control fixed-size-textarea" id="text-area"></textarea>
+                    <button class="btn btn-success send-message" id="send-btn">Send</button>
+                </div>
             </div>
         </div>
     </div>
-</div>
 
-<!-- Include Bootstrap JS and jQuery (required for Bootstrap) -->
-<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
-<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 
-<script>
-    // JavaScript code to handle conversation selection and message display
-    const conversationList = document.querySelector(".conversation-list");
-    const messages = document.querySelector(".messages");
-    const actionButtons = document.querySelector(".action-buttons");
+    <script>
+        var selectedConversationId = -1;
 
-    // Add click event listeners to conversation items
-    conversationList.addEventListener("click", (event) => {
-        if (event.target.classList.contains("list-group-item")) {
-            // Clear existing messages and display new messages for the selected conversation
-            messages.innerHTML = `<p>Messages for ${event.target.innerText}</p>`;
+        // La incarcarea documentului se extrag si se pun in pagina conversatiile
+        $(document).ready(() => {
+            $.ajax({
+                type: "GET",
+                url: "/conversations/get",
+                contentType: "application/json",
+                success: conversations => {
+                    // Get the conversation list container
+                    const conversationList = $("#conversationList");
 
-            // Show action buttons for the selected conversation
-            actionButtons.style.display = "block";
-        }
-    });
+                    // Dynamically add conversation items
+                    conversations.forEach(conversation => {
+                        const listItem = $(
+                            "<a href='#' class='list-group-item list-group-item-action'></a>"
+                        ).text(conversation.conversationName);
+                        listItem.attr('id', conversation.id);
+                        conversationList.append(listItem);
+                    });
+                },
+                error: () => {
+                    console.error("error fetch conversations");
+                }
+            });
+        });
 
-    // Example: Display messages for the first conversation by default
-    conversationList.firstElementChild.click();
+        // JavaScript code to handle conversation selection and message display
+        const conversationList = document.querySelector(".conversation-list");
+        const messages = document.querySelector(".messages");
+        const actionButtons = document.querySelector(".action-buttons");
 
-    // Add functionality for creating new conversations (not implemented in this example)
-    const newConversationButton = document.getElementById("newConversationButton");
-    newConversationButton.addEventListener("click", () => {
-        // Implement the logic to create a new conversation
-    });
+        // Add click event listeners to conversation items
+        conversationList.addEventListener("click", event => {
+            if (event.target.classList.contains("list-group-item")) {
+                selectedConversationId = event.target.id;
 
-    // Add functionality for action buttons (leave, invite, delete) based on the selected conversation
-    const leaveConversationButton = document.querySelector(".leave-conversation");
-    leaveConversationButton.addEventListener("click", () => {
-        // Implement the logic to leave the conversation
-    });
+                // Get messages for the selected conversation
+                $.ajax({
+                    type: "GET",
+                    url: `/messages/get/${event.target.id}`,
+                    contentType: "application/json",
+                    success: messages => {
+                        if (messages && messages.length > 0) {
+                            // Clear existing messages
+                            $(".messages").empty();
 
-    // Add event listener for the "Account Details" button
-    const accountDetailsButton = document.querySelector(".account-details");
-    accountDetailsButton.addEventListener("click", () => {
-        // Implement the logic to navigate to the page with account details.
-        // You can use window.location.href or any other method to redirect to the account details page.
-        window.location.href = "account-details.html"; // Replace with the actual URL of your account details page.
-    });
+                            // Iterate through each message and append it to the 'messages' container
+                            messages.forEach(message => {
+                                const messageElement = $(
+                                    `<p>${message.userId}: ${message.messageText} ${message.sentDatetime}</p>`
+                                    );
+                                $(".messages").append(messageElement);
+                            });
+                        } else {
+                            // If there are no messages, display a placeholder message
+                            $(".messages").html(
+                                "<p>No messages available for this conversation.</p>");
+                        }
+                    },
+                    error: () => {
+                        console.error("error fetch messages");
+                    }
+                });
 
-    const inviteToConversationButton = document.querySelector(".invite-to-conversation");
-    inviteToConversationButton.addEventListener("click", () => {
-        // Implement the logic to invite someone to the conversation
-    });
+                // Show action buttons for the selected conversation
+                actionButtons.style.display = "block";
+            }
+        });
 
-    const deleteConversationButton = document.querySelector(".delete-conversation");
-    deleteConversationButton.addEventListener("click", () => {
-        // Implement the logic to delete the conversation
-    });
-</script>
+        // Example: Display messages for the first conversation by default
+        //conversationList.firstElementChild.click();
+
+        const sendButton = document.getElementById("send-btn");
+        sendButton.addEventListener("click", () => {
+            const messageDTO = {
+                conversationId: selectedConversationId,
+                messageText: $("#text-area").val()
+            }
+
+            $.ajax({
+                type: "POST",
+                url: "/messages/save",
+                contentType: "application/json",
+                data: JSON.stringify(messageDTO),
+                success: () => {
+                    console.log(messageDTO);
+                    console.log(JSON.stringify(messageDTO));
+                },
+                error: () => {
+                    console.error("error sending message");
+                }
+            });
+        })
+
+        // Add functionality for creating new conversations (not implemented in this example)
+        const newConversationButton = document.getElementById("newConversationButton");
+        newConversationButton.addEventListener("click", () => {
+            // Implement the logic to create a new conversation
+        });
+
+        // Add functionality for action buttons (leave, invite, delete) based on the selected conversation
+        const leaveConversationButton = document.querySelector(".leave-conversation");
+        leaveConversationButton.addEventListener("click", () => {
+            // Implement the logic to leave the conversation
+        });
+
+        // Add event listener for the "Account Details" button
+        const accountDetailsButton = document.querySelector(".account-details");
+        accountDetailsButton.addEventListener("click", () => {
+            // Implement the logic to navigate to the page with account details.
+            // You can use window.location.href or any other method to redirect to the account details page.
+            window.location.href =
+                "account-details.html"; // Replace with the actual URL of your account details page.
+        });
+
+        const inviteToConversationButton = document.querySelector(".invite-to-conversation");
+        inviteToConversationButton.addEventListener("click", () => {
+            // Implement the logic to invite someone to the conversation
+        });
+
+        const deleteConversationButton = document.querySelector(".delete-conversation");
+        deleteConversationButton.addEventListener("click", () => {
+            // Implement the logic to delete the conversation
+        });
+    </script>
 </body>
+
 </html>

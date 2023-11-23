@@ -19,8 +19,13 @@ public class ConversationController {
 
     @GetMapping(value="/get")
     public ResponseEntity<Object> getConversationsOfUser(HttpServletRequest request){
+        Long userId = (long) -1;
         Cookie[] cookies = request.getCookies();
-        Long userId = Long.valueOf(cookies[1].getValue());
+        for (Cookie cookie : cookies) {
+            if ("userId".equals(cookie.getName())) {
+                userId = Long.valueOf(cookie.getValue());
+            }
+        }
         return new ResponseEntity<>(conversationService.getConversationsOfUser(userId), HttpStatus.OK);
     }
 
