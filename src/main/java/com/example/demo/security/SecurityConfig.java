@@ -17,7 +17,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 //        securedEnabled = true,
 //       jsr250Enabled = true)
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
-    private CustomUserDetailsService customUserDetailsService;
+    private final CustomUserDetailsService customUserDetailsService;
 
     public SecurityConfig(CustomUserDetailsService customUserDetailsService) {
         this.customUserDetailsService = customUserDetailsService;

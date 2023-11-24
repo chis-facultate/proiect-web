@@ -20,8 +20,8 @@ import javax.servlet.http.HttpServletResponse;
 
 @Controller
 public class AuthController {
-    private AuthenticationManager authenticationManager;
-    private UserService userService;
+    private final AuthenticationManager authenticationManager;
+    private final UserService userService;
 
     public AuthController(AuthenticationManager authenticationManager, UserService userService) {
         this.authenticationManager = authenticationManager;

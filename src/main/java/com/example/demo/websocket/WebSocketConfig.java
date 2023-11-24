@@ -9,15 +9,35 @@ import org.springframework.web.socket.config.annotation.WebSocketMessageBrokerCo
 @Configuration
 @EnableWebSocketMessageBroker
 public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
+    /**
+     * This method configures the message broker.
+     * @param registry
+     */
     @Override
     public void configureMessageBroker(MessageBrokerRegistry registry) {
-        registry.enableSimpleBroker("/product_update");
+        /**
+         * registry.enableSimpleBroker("/topic") line enables a simple in-memory message broker
+         * that can handle message destinations starting with "/topic".
+         * Clients can subscribe to or send messages to these destinations.
+         */
+        registry.enableSimpleBroker("/topic");
+        /**
+         * registry.setApplicationDestinationPrefixes("/app") sets the application destination prefix to "/app".
+         * This means that messages whose destination starts with "/app" will be routed
+         * to methods annotated with @MessageMapping on the server side.
+         */
         registry.setApplicationDestinationPrefixes("/app");
     }
 
+    /**
+     * This method registers the STOMP (Simple Text Oriented Messaging Protocol) endpoint,
+     * which is the entry point for WebSocket connections.
+     * The endpoint is "/chat", and .withSockJS() indicates that SockJS should be used as a fallback
+     * for clients that do not support WebSocket.
+     * @param registry
+     */
     @Override
     public void registerStompEndpoints(StompEndpointRegistry registry) {
-//        registry.addEndpoint("/ws-message").setAllowedOriginPatterns("*").withSockJS();
-        registry.addEndpoint("/ws-message").setAllowedOriginPatterns("*");
+        registry.addEndpoint("/chat").setAllowedOriginPatterns("*").withSockJS();
     }
 }
