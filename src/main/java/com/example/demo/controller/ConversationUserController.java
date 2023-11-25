@@ -24,8 +24,13 @@ public class ConversationUserController {
 
     @DeleteMapping(value = "/leave/{conversationId}")
     public ResponseEntity<Object> leave(@PathVariable Long conversationId, HttpServletRequest request){
+        Long userId = null;
         Cookie[] cookies = request.getCookies();
-        Long userId = Long.valueOf(cookies[1].getValue());
+        for (Cookie cookie : cookies) {
+            if ("userId".equals(cookie.getName())) {
+                userId = Long.valueOf(cookie.getValue());
+            }
+        }
         conversationUserService.deleteByConversationIdAndUserId(conversationId, userId);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }

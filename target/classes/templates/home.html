@@ -143,24 +143,17 @@
                     url: `/messages/get/${event.target.id}`,
                     contentType: "application/json",
                     success: messages => {
-                        if (messages && messages.length > 0) {
-                            // Clear existing messages
-                            $(".messages").empty();
+                        // Clear existing messages
+                        $(".messages").empty();
 
+                        if (messages && messages.length > 0) {
                             // Iterate through each message and append it to the 'messages' container
                             messages.forEach(messageDTO => {
                                 showMessage(messageDTO);
                             });
-
-                            // Make action buttons visible
-                            sendButton.style.visibility = "visible";
-                            inviteButton.style.visibility = "visible";
-                            leaveConversationButton.style.visibility = "visible";
-                            deleteConversationButton.style.visibility = "visible";
-
-                            // Make text area visible
-                            textArea.style.visibility = "visible";
                         }
+
+                        displayHiddenElements();
                     },
                     error: () => {
                         console.error("error fetch messages");
@@ -201,6 +194,7 @@
                 success: () => {
                     document.getElementById(selectedConversationId).remove();
                     $(".messages").empty();
+                    hideElements();
                     console.log("conversation left");
                 },
                 error: () => {
@@ -223,6 +217,7 @@
                 success: () => {
                     document.getElementById(selectedConversationId).remove();
                     $(".messages").empty();
+                    hideElements();
                     console.log("conversation deleted");
                 },
                 error: () => {
@@ -293,6 +288,29 @@
             $(".messages").append(messageElement);
             // Auto scroll down
             messagesArea.scrollTop = messagesArea.scrollHeight;
+        }
+
+        // Other functions
+        function hideElements() {
+            // Make action buttons invisible
+            sendButton.style.visibility = "hidden";
+            inviteButton.style.visibility = "hidden";
+            leaveConversationButton.style.visibility = "hidden";
+            deleteConversationButton.style.visibility = "hidden";
+
+            // Make text area invisible
+            textArea.style.visibility = "hidden";
+        }
+
+        function displayHiddenElements() {
+            // Make action buttons visible
+            sendButton.style.visibility = "visible";
+            inviteButton.style.visibility = "visible";
+            leaveConversationButton.style.visibility = "visible";
+            deleteConversationButton.style.visibility = "visible";
+
+            // Make text area visible
+            textArea.style.visibility = "visible";
         }
     </script>
 </body>

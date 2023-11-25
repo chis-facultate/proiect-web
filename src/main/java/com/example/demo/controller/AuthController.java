@@ -50,13 +50,11 @@ public class AuthController {
                         userCredentialsDTO.getPassword()));
         SecurityContextHolder.getContext().setAuthentication(authenticate);
 
-        //
         UserDataDTO userDataDTO = userService.findByLoginUsername(userCredentialsDTO.getLoginUsername());
         Cookie userCookie = new Cookie("userId", String.valueOf(userDataDTO.getId()));
         userCookie.setMaxAge(-1); // cookie valabil pe durata sesiunii
         userCookie.setPath("/");
         response.addCookie(userCookie);
-//
 
         return new ResponseEntity<>("Login successfully!", HttpStatus.CREATED);
     }

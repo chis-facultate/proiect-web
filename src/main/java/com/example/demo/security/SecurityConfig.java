@@ -12,10 +12,6 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 
 @Configuration
 @EnableWebSecurity
-//@EnableGlobalMethodSecurity( // Adnotare hibernate pentru useri cu roluri diferite
-//        prePostEnabled = true,
-//        securedEnabled = true,
-//       jsr250Enabled = true)
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
     private final CustomUserDetailsService customUserDetailsService;
 

@@ -19,14 +19,24 @@ public class UserController {
     @GetMapping(value = "/get")
     public ResponseEntity<Object> getUserData(HttpServletRequest request){
         Cookie[] cookies = request.getCookies();
-        Long userId = Long.valueOf(cookies[1].getValue());
+        Long userId = null;
+        for (Cookie cookie : cookies) {
+            if ("userId".equals(cookie.getName())) {
+                userId = Long.valueOf(cookie.getValue());
+            }
+        }
         return new ResponseEntity<>(userService.findById(userId), HttpStatus.OK);
     }
 
     @PatchMapping(value = "/patch_nickname/{newNickname}")
     public ResponseEntity<Object> patchNickname(@PathVariable String newNickname, HttpServletRequest request){
         Cookie[] cookies = request.getCookies();
-        Long userId = Long.valueOf(cookies[1].getValue());
+        Long userId = null;
+        for (Cookie cookie : cookies) {
+            if ("userId".equals(cookie.getName())) {
+                userId = Long.valueOf(cookie.getValue());
+            }
+        }
         return new ResponseEntity<>(userService.patchNickname(userId, newNickname), HttpStatus.OK);
     }
 }

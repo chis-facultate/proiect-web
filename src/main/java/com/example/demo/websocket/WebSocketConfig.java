@@ -21,12 +21,6 @@ public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
          * Clients can subscribe to or send messages to these destinations.
          */
         registry.enableSimpleBroker("/topic");
-        /**
-         * registry.setApplicationDestinationPrefixes("/app") sets the application destination prefix to "/app".
-         * This means that messages whose destination starts with "/app" will be routed
-         * to methods annotated with @MessageMapping on the server side.
-         */
-        registry.setApplicationDestinationPrefixes("/app");
     }
 
     /**
